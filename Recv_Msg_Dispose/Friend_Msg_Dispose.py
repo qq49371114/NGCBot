@@ -12,7 +12,7 @@ class Friend_Msg_Dispose:
         self.wcf = wcf
         # 读取配置文件
         current_path = os.path.dirname(__file__)
-        config = yaml.load(open(current_path + '/../config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
         self.Room_Key_Word = config['Room_Key_Word']
         self.Administrators = config['Administrators']
         self.Ai_Lock = config['System_Config']['Ai_Lock']

@@ -20,7 +20,7 @@ class Main_Server:
     def __init__(self):
         # 读取配置文件
         current_path = os.path.dirname(__file__)
-        config = yaml.load(open(current_path + '/../config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
 
         self.JoinRoom_Msg = config['Function_Key_Word']['JoinRoom_Msg']
         self.AcceptFriend_Msg = config['Custom_Msg']['AcceptFriend_Msg']

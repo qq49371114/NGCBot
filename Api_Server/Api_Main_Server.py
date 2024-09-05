@@ -38,11 +38,11 @@ class Api_Main_Server:
         current_list_path.pop()
         self.Cache_path = '/'.join(current_list_path) + '/Cache'
         # 初始化读取配置文件
-        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
         self.system_copyright = config['System_Config']['System_Copyright']
 
         # 读取配置文件
-        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
         self.Key = config['Api_Server']['Api_Config']['Key']
         self.ThreatBook_Key = config['Api_Server']['Api_Config']['ThreatBook_Key']
         self.Pic_Apis = config['Api_Server']['Pic_Api']

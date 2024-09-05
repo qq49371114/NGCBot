@@ -13,7 +13,7 @@ class Push_Main_Server:
     def __init__(self, wcf):
         self.wcf = wcf
         current_path = os.path.dirname(__file__)
-        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
         self.db_file = current_path + '/../Config/Point_db.db'
         self.Ams = Api_Main_Server(wcf=self.wcf)
         self.Dms = Db_Main_Server(wcf=self.wcf)

@@ -9,7 +9,7 @@ class Db_Point_Server:
         current_path = os.path.dirname(__file__)
         # 数据库存放地址
         self.db_file = current_path + '/../Config/Point_db.db'
-        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
 
         # 读取积分配置
         self.sign_point = config['Point_Config']['Sign']['Point']

@@ -22,7 +22,7 @@ class Room_Msg_Dispose:
 
         # 读取配置文件
         current_path = os.path.dirname(__file__)
-        config = yaml.load(open(current_path + '/../config/config.yaml', encoding='UTF-8'), yaml.Loader)
+        config = yaml.load(open(current_path + '/../config/config.yaml', encoding='UTF-8'), yaml.SafeLoader)
         self.system_copyright = config['System_Config']['System_Copyright']
 
         self.administrators = config['Administrators']
