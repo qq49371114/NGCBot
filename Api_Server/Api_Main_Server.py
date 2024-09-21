@@ -11,6 +11,7 @@ import random
 import yaml
 import time
 import os
+from security import safe_requests
 
 
 class Api_Main_Server:
@@ -187,7 +188,7 @@ class Api_Main_Server:
         url = random.choice(self.Pic_Apis)
         save_path = self.Cache_path + '/Pic_Cache/' + str(int(time.time() * 1000)) + '.jpg'
         try:
-            pic_data = requests.get(url=url, headers=self.headers, timeout=30, verify=False).content
+            pic_data = safe_requests.get(url=url, headers=self.headers, timeout=30, verify=False).content
             with open(file=save_path, mode='wb') as pd:
                 pd.write(pic_data)
         except Exception as e:
@@ -203,7 +204,7 @@ class Api_Main_Server:
         url = random.choice(self.Video_Apis)
         save_path = self.Cache_path + '/Video_Cache/' + str(int(time.time() * 1000)) + '.mp4'
         try:
-            video_data = requests.get(url=url, headers=self.headers, timeout=90, verify=False).content
+            video_data = safe_requests.get(url=url, headers=self.headers, timeout=90, verify=False).content
             with open(file=save_path, mode='wb') as vd:
                 vd.write(video_data)
         except Exception as e:
@@ -218,7 +219,7 @@ class Api_Main_Server:
         OutPut.outPut(f'[*]: 正在调用天气查询接口... ...')
         city = content.split(' ')[-1]
         try:
-            json_data = requests.get(url=self.Weather_Api.format(self.Key, city), verify=False).json()
+            json_data = safe_requests.get(url=self.Weather_Api.format(self.Key, city), verify=False).json()
             alarm_msg = ''
             if json_data['code'] == 200:
                 data = json_data['result']
@@ -241,7 +242,7 @@ class Api_Main_Server:
         OutPut.outPut('[*]: 正在调用舔狗日记API接口... ...')
         url = self.Dog_Api.format(self.Key)
         try:
-            json_data = requests.get(url=url, headers=self.headers, timeout=20, verify=False).json()
+            json_data = safe_requests.get(url=url, headers=self.headers, timeout=20, verify=False).json()
             if json_data['code'] == 200 and json_data['msg'] == 'success':
                 msg = json_data['result']['content'].strip()
             else:
@@ -263,7 +264,7 @@ class Api_Main_Server:
             constellation += '座'
         url = self.Constellation_Api.format(self.Key, constellation)
         try:
-            json_data = requests.get(url=url, timeout=20, verify=False).json()
+            json_data = safe_requests.get(url=url, timeout=20, verify=False).json()
             if json_data['code'] != 200 and json_data['msg'] != 'success':
                 msg = '星座查询错误, 请确保输入正确！'
                 return msg
@@ -281,7 +282,7 @@ class Api_Main_Server:
         OutPut.outPut('[*]: 正在调用早安寄语API接口... ...')
         url = self.Morning_Api.format(self.Key)
         try:
-            json_data = requests.get(url=url, timeout=30, verify=False).json()
+            json_data = safe_requests.get(url=url, timeout=30, verify=False).json()
             if json_data['code'] != 200 and json_data['msg'] != 'success':
                 msg = f'[~]: 早安寄语接口出现错误, 错误信息请查看日志 ~~~~~~'
                 return msg
@@ -297,7 +298,7 @@ class Api_Main_Server:
         OutPut.outPut(f'[*]: 正在调用摸鱼日记接口... ...')
         save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
         try:
-            pic_data = requests.get(url=self.Fish_Api, headers=self.headers, timeout=30, verify=False).content
+            pic_data = safe_requests.get(url=self.Fish_Api, headers=self.headers, timeout=30, verify=False).content
             with open(file=save_path, mode='wb') as pd:
                 pd.write(pic_data)
         except Exception as e:
@@ -313,7 +314,7 @@ class Api_Main_Server:
         domain = content.split(' ')[-1]
         url = self.Whois_Api.format(domain)
         try:
-            data = requests.get(url=url, timeout=30, verify=False).text
+            data = safe_requests.get(url=url, timeout=30, verify=False).text
             if not data:
                 msg = f'[~]: Whois查询接口出现错误, 错误信息请查看日志 ~~~~~~'
                 return msg
@@ -331,7 +332,7 @@ class Api_Main_Server:
         phone = content.split(' ')[-1]
         url = self.Attribution_Api.format(phone)
         try:
-            json_data = requests.get(url=url, timeout=30, verify=False).json()
+            json_data = safe_requests.get(url=url, timeout=30, verify=False).json()
             if not json_data["data"]["province"]:
                 msg = f'[~]: 归属地查询接口出现错误, 错误信息请查看日志 ~~~~~~'
                 return msg
@@ -348,7 +349,7 @@ class Api_Main_Server:
         domain = content.split(' ')[-1]
         url = self.Icp_Api.format(domain)
         try:
-            json_data = requests.get(url=url, timeout=30, verify=False).json()
+            json_data = safe_requests.get(url=url, timeout=30, verify=False).json()
             if 'error' in json_data.keys():
                 msg = f'此域名未备案！！！'
                 return msg
@@ -363,7 +364,7 @@ class Api_Main_Server:
     def get_kfc(self):
         OutPut.outPut('[*]: 正在调用疯狂星期四文案API接口... ...')
         try:
-            json_data = requests.get(url=self.Kfc_Api, timeout=30, verify=False).json()
+            json_data = safe_requests.get(url=self.Kfc_Api, timeout=30, verify=False).json()
             if json_data['code'] != 200:
                 msg = '[~]: 疯狂星期四文案接口出现错误，具体原因请看日志 ~~~~~~'
                 return msg
@@ -381,7 +382,7 @@ class Api_Main_Server:
         url = self.Dream_Api.format(self.Key, dream)
         msg = ''
         try:
-            json_data = requests.get(url=url, timeout=30, verify=False).json()
+            json_data = safe_requests.get(url=url, timeout=30, verify=False).json()
             if json_data['code'] != 200:
                 msg = '你这梦太牛逼了, 解不了一点 ~~~~~~'
                 return msg
@@ -400,7 +401,7 @@ class Api_Main_Server:
         ciphertext = content.strip().split(' ')[-1]
         OutPut.outPut('[*]: 正在调用MD5解密对话API接口... ...')
         try:
-            resp = requests.get(url=self.Somd5_Md5_url.format(self.Somd5_Key, ciphertext), verify=False, timeout=10)
+            resp = safe_requests.get(url=self.Somd5_Md5_url.format(self.Somd5_Key, ciphertext), verify=False, timeout=10)
         except Exception as e:
             OutPut.outPut(f'[-]: MD5解密接口错误，错误信息：{e}')
             return f'[-]: MD5解密接口错误，错误信息：{e}'
@@ -481,7 +482,7 @@ class Api_Main_Server:
         ports_info = ""
         msg = ''
         try:
-            json_data = requests.get(url=self.Port_Scan_Api.format(ip)).json()
+            json_data = safe_requests.get(url=self.Port_Scan_Api.format(ip)).json()
             for port in json_data['ports']:
                 port_info = '{}-{}-{}'.format(port['port'], port['base_protocol'], port['protocol'])
                 ports_info += port_info + "\n"
@@ -554,7 +555,7 @@ class Api_Main_Server:
     def get_anquanke_news(self, news_list):
         news_list += "\n#安全客"
         try:
-            resp = requests.get('https://www.anquanke.com/knowledge', timeout=5, verify=False)
+            resp = safe_requests.get('https://www.anquanke.com/knowledge', timeout=5, verify=False)
             tree = etree.HTML(resp.text)
             divs = tree.xpath('//div[@class="article-item common-item"]/div')
             for div in divs:
