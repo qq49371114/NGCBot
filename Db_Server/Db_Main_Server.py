@@ -43,7 +43,7 @@ class Db_Main_Server:
 
     # 数据库初始化(创建群数据库，好友数据库，公众号数据库)
     def db_init(self):
-        OutPut.outPut(f'[*]: 正在初始化总数据库... ...')
+        OutPut.outPut('[*]: 正在初始化总数据库... ...')
         conn, cursor = self.open_db()
         create_rooms_sql = '''CREATE TABLE IF NOT EXISTS rooms 
                 (room_id varchar(255),
@@ -86,7 +86,7 @@ class Db_Main_Server:
     def add_room(self, room_id, room_name):
         if not self.judge_room(room_id=room_id):
             conn, curser = self.open_db()
-            add_room_sql = f'''INSERT INTO rooms VALUES (?, ?);'''
+            add_room_sql = '''INSERT INTO rooms VALUES (?, ?);'''
             curser.execute(add_room_sql, (room_id, room_name))
             conn.commit()
             self.close_db(conn, curser)
@@ -95,7 +95,7 @@ class Db_Main_Server:
     def add_gh(self, gh_id, gh_name):
         if not self.judge_gh(gh_id=gh_id):
             conn, curser = self.open_db()
-            add_gh_sql = f'''INSERT INTO ghs VALUES (?, ?);'''
+            add_gh_sql = '''INSERT INTO ghs VALUES (?, ?);'''
             curser.execute(add_gh_sql, (gh_id, gh_name))
             conn.commit()
             self.close_db(conn, curser)
@@ -104,7 +104,7 @@ class Db_Main_Server:
     def add_user(self, wx_id, wx_name):
         if not self.judge_user(wx_id=wx_id):
             conn, curser = self.open_db()
-            add_user_sql = f'''INSERT INTO users VALUES (?, ?);'''
+            add_user_sql = '''INSERT INTO users VALUES (?, ?);'''
             curser.execute(add_user_sql, (wx_id, wx_name))
             conn.commit()
             self.close_db(conn, curser)
@@ -114,7 +114,7 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if not self.judge_admin(room_id=room_id, wx_id=wx_id):
             conn, curser = self.open_db()
-            add_admin_sql = f'''INSERT INTO admins VALUES (?, ?, ?, ?);'''
+            add_admin_sql = '''INSERT INTO admins VALUES (?, ?, ?, ?);'''
             curser.execute(add_admin_sql, (room_id, room_name, wx_id, wx_name))
             conn.commit()
             self.close_db(conn, curser)
@@ -129,8 +129,8 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if self.judge_admin(wx_id=wx_id, room_id=room_id):
             conn, curser = self.open_db()
-            del_admin_sql = f'''DELETE FROM admins WHERE wx_id = '{wx_id}' AND room_id = '{room_id}';'''
-            curser.execute(del_admin_sql)
+            del_admin_sql = '''DELETE FROM admins WHERE wx_id = ? AND room_id = ?;'''
+            curser.execute(del_admin_sql, (wx_id, room_id, ))
             conn.commit()
             self.close_db(conn, curser)
             msg = f'[+]: 群聊【{room_name}】管理员 {wx_name} 已删除！！！'
@@ -144,7 +144,7 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if not self.judge_white_room(room_id=room_id):
             conn, curser = self.open_db()
-            add_white_room_sql = f'''INSERT INTO white_rooms VALUES (?, ?);'''
+            add_white_room_sql = '''INSERT INTO white_rooms VALUES (?, ?);'''
             curser.execute(add_white_room_sql, (room_id, room_name))
             conn.commit()
             self.close_db(conn, curser)
@@ -159,8 +159,8 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if self.judge_white_room(room_id=room_id):
             conn, curser = self.open_db()
-            del_white_room_sql = f'''DELETE FROM white_rooms WHERE room_id = '{room_id}';'''
-            curser.execute(del_white_room_sql)
+            del_white_room_sql = '''DELETE FROM white_rooms WHERE room_id = ?;'''
+            curser.execute(del_white_room_sql, (room_id, ))
             conn.commit()
             self.close_db(conn, curser)
             msg = f'[+]: 群聊【{room_name}】已从白名单从移除！！！'
@@ -174,7 +174,7 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if not self.judge_black_room(room_id=room_id):
             conn, curser = self.open_db()
-            add_black_room_sql = f'''INSERT INTO black_rooms VALUES (?, ?);'''
+            add_black_room_sql = '''INSERT INTO black_rooms VALUES (?, ?);'''
             curser.execute(add_black_room_sql, (room_id, room_name))
             conn.commit()
             self.close_db(conn, curser)
@@ -189,8 +189,8 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if self.judge_black_room(room_id=room_id):
             conn, curser = self.open_db()
-            del_black_room_sql = f'''DELETE from black_rooms WHERE room_id = '{room_id}';'''
-            curser.execute(del_black_room_sql)
+            del_black_room_sql = '''DELETE from black_rooms WHERE room_id = ?;'''
+            curser.execute(del_black_room_sql, (room_id, ))
             conn.commit()
             self.close_db(conn, curser)
             msg = f'[+]: 群聊【{room_name}】解除拉黑成功！！！'
@@ -204,7 +204,7 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if not self.judge_push_room(room_id=room_id):
             conn, curser = self.open_db()
-            add_push_room_sql = f'''INSERT INTO push_rooms VALUES (?, ?);'''
+            add_push_room_sql = '''INSERT INTO push_rooms VALUES (?, ?);'''
             curser.execute(add_push_room_sql, (room_id, room_name,))
             conn.commit()
             self.close_db(conn, curser)
@@ -219,8 +219,8 @@ class Db_Main_Server:
         room_name = self.query_room_name(room_id)
         if self.judge_push_room(room_id=room_id):
             conn, curser = self.open_db()
-            del_push_room_sql = f'''DELETE FROM push_rooms WHERE room_id= '{room_id}';'''
-            curser.execute(del_push_room_sql)
+            del_push_room_sql = '''DELETE FROM push_rooms WHERE room_id= ?;'''
+            curser.execute(del_push_room_sql, (room_id, ))
             conn.commit()
             self.close_db(conn, curser)
             msg = f'[+]: 群聊【{room_name}】移除推送服务成功！！！'
@@ -233,7 +233,7 @@ class Db_Main_Server:
     def add_white_gh(self, gh_id, gh_name):
         if not self.judge_white_gh(gh_name=gh_name):
             conn, curser = self.open_db()
-            add_white_gh_sql = f'''INSERT INTO white_ghs VALUES (?, ?);'''
+            add_white_gh_sql = '''INSERT INTO white_ghs VALUES (?, ?);'''
             curser.execute(add_white_gh_sql, (gh_id, gh_name,))
             conn.commit()
             self.close_db(conn, curser)
@@ -247,8 +247,8 @@ class Db_Main_Server:
     def del_white_gh(self, gh_name):
         if self.judge_white_gh(gh_name=gh_name):
             conn, curser = self.open_db()
-            del_white_gh = f'''DELETE FROM white_ghs WHERE gh_name = '{gh_name}';'''
-            curser.execute(del_white_gh)
+            del_white_gh = '''DELETE FROM white_ghs WHERE gh_name = ?;'''
+            curser.execute(del_white_gh, (gh_name, ))
             conn.commit()
             self.close_db(conn, curser)
             msg = f'[+]: 公众号【{gh_name}】从白名单移除成功！！！'
@@ -261,8 +261,8 @@ class Db_Main_Server:
     def query_room_name(self, room_id):
         if self.judge_room(room_id=room_id):
             conn, curser = self.open_db()
-            query_room_name = f'''SELECT room_name FROM rooms WHERE room_id= '{room_id}';'''
-            curser.execute(query_room_name)
+            query_room_name = '''SELECT room_name FROM rooms WHERE room_id= ?;'''
+            curser.execute(query_room_name, (room_id, ))
             data = curser.fetchone()
             self.close_db(conn, curser)
             if data:
@@ -275,8 +275,8 @@ class Db_Main_Server:
     # 判断某人是否为管理员
     def judge_admin(self, room_id, wx_id):
         conn, curser = self.open_db()
-        judge_admin_sql = f'''SELECT wx_name FROM admins where wx_id='{wx_id}' and room_id='{room_id}';'''
-        curser.execute(judge_admin_sql)
+        judge_admin_sql = '''SELECT wx_name FROM admins where wx_id=? and room_id=?;'''
+        curser.execute(judge_admin_sql, (wx_id, room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -287,8 +287,8 @@ class Db_Main_Server:
     # 判断群聊是否处于白名单群聊
     def judge_white_room(self, room_id):
         conn, curser = self.open_db()
-        judge_white_room_sql = f'''SELECT room_id FROM white_rooms WHERE room_id = '{room_id}';'''
-        curser.execute(judge_white_room_sql)
+        judge_white_room_sql = '''SELECT room_id FROM white_rooms WHERE room_id = ?;'''
+        curser.execute(judge_white_room_sql, (room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -299,8 +299,8 @@ class Db_Main_Server:
     # 判断群聊是否为黑名单群聊
     def judge_black_room(self, room_id):
         conn, curser = self.open_db()
-        judge_black_room_sql = f'''SELECT room_id FROM black_rooms WHERE room_id = '{room_id}';'''
-        curser.execute(judge_black_room_sql)
+        judge_black_room_sql = '''SELECT room_id FROM black_rooms WHERE room_id = ?;'''
+        curser.execute(judge_black_room_sql, (room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -311,8 +311,8 @@ class Db_Main_Server:
     # 判断群聊是否为推送群聊
     def judge_push_room(self, room_id):
         conn, curser = self.open_db()
-        judge_push_room_sql = f'''SELECT room_id FROM push_rooms WHERE room_id = '{room_id}';'''
-        curser.execute(judge_push_room_sql)
+        judge_push_room_sql = '''SELECT room_id FROM push_rooms WHERE room_id = ?;'''
+        curser.execute(judge_push_room_sql, (room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -323,8 +323,8 @@ class Db_Main_Server:
     # 判断是否为白名单公众号
     def judge_white_gh(self, gh_name):
         conn, curser = self.open_db()
-        judge_white_gh_sql = f'''SELECT gh_id FROM white_ghs WHERE gh_name = '{gh_name}';'''
-        curser.execute(judge_white_gh_sql)
+        judge_white_gh_sql = '''SELECT gh_id FROM white_ghs WHERE gh_name = ?;'''
+        curser.execute(judge_white_gh_sql, (gh_name, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -335,8 +335,8 @@ class Db_Main_Server:
     # 判断群聊是否存在
     def judge_room(self, room_id):
         conn, curser = self.open_db()
-        judge_room_sql = f'''SELECT room_id FROM rooms WHERE room_id = '{room_id}';'''
-        curser.execute(judge_room_sql)
+        judge_room_sql = '''SELECT room_id FROM rooms WHERE room_id = ?;'''
+        curser.execute(judge_room_sql, (room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -347,8 +347,8 @@ class Db_Main_Server:
     # 判断好友是否存在
     def judge_user(self, wx_id):
         conn, curser = self.open_db()
-        judge_user_sql = f'''SELECT wx_id FROM users WHERE wx_id = '{wx_id}';'''
-        curser.execute(judge_user_sql)
+        judge_user_sql = '''SELECT wx_id FROM users WHERE wx_id = ?;'''
+        curser.execute(judge_user_sql, (wx_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -359,8 +359,8 @@ class Db_Main_Server:
     # 判断微信公众号是否存在
     def judge_gh(self, gh_id):
         conn, curser = self.open_db()
-        judge_gh_sql = f'''SELECT gh_id FROM ghs WHERE gh_id = '{gh_id}';'''
-        curser.execute(judge_gh_sql)
+        judge_gh_sql = '''SELECT gh_id FROM ghs WHERE gh_id = ?;'''
+        curser.execute(judge_gh_sql, (gh_id, ))
         data = curser.fetchone()
         if data:
             return True
@@ -370,8 +370,8 @@ class Db_Main_Server:
     # 查看某群所有管理员
     def show_admins(self, wx_id, room_id):
         conn, curser = self.open_db()
-        show_admins_sql = f'''SELECT wx_id, wx_name FROM admins WHERE wx_id = '{wx_id}' AND room_id = '{room_id}';'''
-        curser.execute(show_admins_sql)
+        show_admins_sql = '''SELECT wx_id, wx_name FROM admins WHERE wx_id = ? AND room_id = ?;'''
+        curser.execute(show_admins_sql, (wx_id, room_id, ))
         data = curser.fetchall()
         self.close_db(conn, curser)
         msg = dict()
@@ -382,7 +382,7 @@ class Db_Main_Server:
     # 查看所有白名单群聊
     def show_white_rooms(self, ):
         conn, curser = self.open_db()
-        show_white_rooms_sql = f'''SELECT room_id, room_name FROM white_rooms;'''
+        show_white_rooms_sql = '''SELECT room_id, room_name FROM white_rooms;'''
         curser.execute(show_white_rooms_sql)
         data = curser.fetchall()
         self.close_db(conn, curser)
@@ -394,7 +394,7 @@ class Db_Main_Server:
     # 查看所有黑名单群聊
     def show_black_rooms(self, ):
         conn, curser = self.open_db()
-        show_white_rooms_sql = f'''SELECT room_id, room_name FROM black_rooms;'''
+        show_white_rooms_sql = '''SELECT room_id, room_name FROM black_rooms;'''
         curser.execute(show_white_rooms_sql)
         data = curser.fetchall()
         self.close_db(conn, curser)
@@ -406,7 +406,7 @@ class Db_Main_Server:
     # 查看所有推送群聊
     def show_push_rooms(self):
         conn, curser = self.open_db()
-        show_push_rooms_sql = f'''SELECT room_id, room_name FROM push_rooms;'''
+        show_push_rooms_sql = '''SELECT room_id, room_name FROM push_rooms;'''
         curser.execute(show_push_rooms_sql)
         data = curser.fetchall()
         self.close_db(conn, curser)
@@ -418,7 +418,7 @@ class Db_Main_Server:
     # 查看所有白名单公众号
     def show_white_ghs(self):
         conn, curser = self.open_db()
-        show_white_ghs = f'''SELECT gh_id, gh_name FROM white_ghs;'''
+        show_white_ghs = '''SELECT gh_id, gh_name FROM white_ghs;'''
         curser.execute(show_white_ghs)
         data = curser.fetchall()
         self.close_db(conn, curser)

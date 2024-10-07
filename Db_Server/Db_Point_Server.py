@@ -55,8 +55,8 @@ class Db_Point_Server:
     # 判断用户是否存在
     def judge_user(self, wx_id, room_id):
         conn, curser = self.open_db()
-        judge_user_sql = f'''SELECT wx_id FROM points WHERE wx_id = '{wx_id}' and room_id = '{room_id}';'''
-        curser.execute(judge_user_sql)
+        judge_user_sql = '''SELECT wx_id FROM points WHERE wx_id = ? and room_id = ?;'''
+        curser.execute(judge_user_sql, (wx_id, room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -68,8 +68,8 @@ class Db_Point_Server:
     def query_point(self, wx_id, wx_name, room_id, room_name):
         if self.judge_user(wx_id=wx_id, room_id=room_id):
             conn, curser = self.open_db()
-            query_point_sql = f'''SELECT point FROM points WHERE wx_id = '{wx_id}' and room_id = '{room_id}';'''
-            curser.execute(query_point_sql)
+            query_point_sql = '''SELECT point FROM points WHERE wx_id = ? and room_id = ?;'''
+            curser.execute(query_point_sql, (wx_id, room_id, ))
             data = curser.fetchone()
             point = data[0]
         else:
@@ -110,8 +110,8 @@ class Db_Point_Server:
     # 判断签到表是否存在此用户
     def judge_sign_user(self, wx_id, room_id):
         conn, curser = self.open_db()
-        judge_sign_user_sql = f'''SELECT wx_id FROM sign WHERE wx_id = '{wx_id}' AND room_id = '{room_id}';'''
-        curser.execute(judge_sign_user_sql)
+        judge_sign_user_sql = '''SELECT wx_id FROM sign WHERE wx_id = ? AND room_id = ?;'''
+        curser.execute(judge_sign_user_sql, (wx_id, room_id, ))
         data = curser.fetchone()
         self.close_db(conn, curser)
         if data:
@@ -123,10 +123,10 @@ class Db_Point_Server:
     def sign(self, wx_id, wx_name, room_id, room_name):
         if self.judge_user(wx_id=wx_id, room_id=room_id):
             if self.judge_sign_user(wx_id=wx_id, room_id=room_id):
-                msg = f'你干嘛~ 哎呦~ 你已经签到过了~'
+                msg = '你干嘛~ 哎呦~ 你已经签到过了~'
             else:
                 conn, curser = self.open_db()
-                sign_sql = f'''INSERT INTO sign VALUES (?, ?, ?, ?);'''
+                sign_sql = '''INSERT INTO sign VALUES (?, ?, ?, ?);'''
                 self.add_point(wx_id=wx_id, wx_name=wx_name, room_id=room_id, room_name=room_name,
                                point=self.sign_point)
                 curser.execute(sign_sql, (wx_id, wx_name, room_id, room_name,))
@@ -161,7 +161,7 @@ class Db_Point_Server:
                         # 如果是超级管理员
                         self.add_point(wx_id=give_sender, wx_name=give_name, room_id=room_id, room_name=room_name,
                                       point=int(point))
-                        msg = f'您是尊贵的超级管理员, 本次赠送不扣除您积分[爱心]'
+                        msg = '您是尊贵的超级管理员, 本次赠送不扣除您积分[爱心]'
                     else:
                         # 积分不足
                         msg = '自己的积分都不够还给别人送, 你牙西啊雷 ~~~~~~'
