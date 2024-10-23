@@ -1,10 +1,10 @@
 from Api_Server.Api_Main_Server import Api_Main_Server
 from Db_Server.Db_Main_Server import Db_Main_Server
-import xml.etree.ElementTree as ET
 from threading import Thread
 from OutPut import OutPut
 import yaml
 import os
+import defusedxml.ElementTree
 
 
 class Friend_Msg_Dispose:
@@ -71,7 +71,7 @@ class Friend_Msg_Dispose:
     # 好友转账处理
     def Accept_Money(self, msg):
         # 只处理好友转账
-        root_xml = ET.fromstring(msg.content.strip())
+        root_xml = defusedxml.ElementTree.fromstring(msg.content.strip())
         title_element = root_xml.find(".//title")
         title = title_element.text if title_element is not None else None
         if '微信转账' == title and msg.sender != self.wcf.self_wxid:

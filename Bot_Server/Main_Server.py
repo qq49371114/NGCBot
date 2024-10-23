@@ -4,7 +4,6 @@ from Push_Server.Push_Main_Server import Push_Main_Server
 from Cache.Cache_Main_Server import Cache_Main_Server
 from Db_Server.Db_Point_Server import Db_Point_Server
 from Db_Server.Db_Main_Server import Db_Main_Server
-import xml.etree.ElementTree as ET
 from threading import Thread
 from cprint import cprint
 from OutPut import OutPut
@@ -14,6 +13,7 @@ import random
 import yaml
 import os
 import re
+import defusedxml.ElementTree
 
 
 class Main_Server:
@@ -95,7 +95,7 @@ class Main_Server:
                 # 好友申请消息处理
                 elif msg.type == 37:
                     # 自动同意好友申请
-                    root_xml = ET.fromstring(msg.content.strip())
+                    root_xml = defusedxml.ElementTree.fromstring(msg.content.strip())
                     wx_id = root_xml.attrib["fromusername"]
                     OutPut.outPut(f'[*]: 接收到新的好友申请, 微信id为: {wx_id}')
                     v3 = root_xml.attrib["encryptusername"]

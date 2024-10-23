@@ -1,12 +1,12 @@
 from Api_Server.Api_Main_Server import Api_Main_Server
 from Db_Server.Db_Point_Server import Db_Point_Server
 from Db_Server.Db_Main_Server import Db_Main_Server
-import xml.etree.ElementTree as ET
 from threading import Thread
 from OutPut import OutPut
 import yaml
 import os
 import re
+import defusedxml.ElementTree
 
 
 class Room_Msg_Dispose:
@@ -526,7 +526,7 @@ class Room_Msg_Dispose:
     # 添加白名单公众号
     def add_white_gh(self, msg):
         try:
-            root_xml = ET.fromstring(msg.content)
+            root_xml = defusedxml.ElementTree.fromstring(msg.content)
             at_msg = f'@{self.wcf.get_alias_in_chatroom(wxid=msg.sender, roomid=msg.roomid)}\n'
             gh_id = root_xml.find('.//sourceusername').text
             gh_name = root_xml.find('.//sourcedisplayname').text
@@ -616,7 +616,7 @@ class Room_Msg_Dispose:
     # 检测广告并自动踢出
     def detecting_advertisements(self, msg):
         white_ghs = self.Dms.show_white_ghs().keys()
-        root_xml = ET.fromstring(msg.content)
+        root_xml = defusedxml.ElementTree.fromstring(msg.content)
         try:
             gh_id = root_xml.find('.//sourceusername').text
             gh_name = root_xml.find('.//sourcedisplayname').text
@@ -681,7 +681,7 @@ class Room_Msg_Dispose:
 
     # 被@人 wx_id 获取
     def get_at_wx_id(self, xml):
-        root_xml = ET.fromstring(xml)
+        root_xml = defusedxml.ElementTree.fromstring(xml)
         try:
             at_user_lists = root_xml.find('.//atuserlist').text.strip(',')
             if ',' in at_user_lists:
