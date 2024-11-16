@@ -41,7 +41,7 @@ class PointApi:
         }
         try:
             file_name = Fcs.returnGaoDeCacheFolder() + '/' + str(int(time.time() * 1000)) + '.png'
-            resp = requests.get(url=self.gaoDeApi, params=params)
+            resp = requests.get(url=self.gaoDeApi, params=params, timeout=60)
             with open(file_name, mode='wb') as f:
                 f.write(resp.content)
             return file_name
@@ -175,7 +175,7 @@ class PointApi:
         op(f'[*]: 正在调用cMd5解密接口... ...')
         md5Url = self.cmd5Api.format(self.cmd5Email, self.cmd5Key, ciphertext)
         try:
-            content = requests.get(url=md5Url).text
+            content = requests.get(url=md5Url, timeout=60).text
             print(content)
             if 'CMD5-ERROR' in content:
                 return None
@@ -198,7 +198,7 @@ class PointApi:
                 'app_id': self.feishuConfigData['feishuAppId'],
                 'app_secret': self.feishuConfigData['feishuSecret']
             }
-            resp = requests.post(url, json=data)
+            resp = requests.post(url, json=data, timeout=60)
             app_access_token = resp.json()['app_access_token']
             return app_access_token
 
@@ -211,7 +211,7 @@ class PointApi:
                 'grant_type': 'refresh_token',
                 'refresh_token': self.feishuConfigData['feishuRefreshToken'],
             }
-            resp = requests.post(url, headers=headers, json=data)
+            resp = requests.post(url, headers=headers, json=data, timeout=60)
             jsonData = resp.json()
             userToken = jsonData['data']['access_token']
             refreshToken = jsonData['data']['refresh_token']
@@ -245,7 +245,7 @@ class PointApi:
             'Authorization': 'Bearer ' + self.feishuConfigData['feishuUserToken']
         }
         try:
-            response = requests.post(self.feishuApi, headers=headers, json=data)
+            response = requests.post(self.feishuApi, headers=headers, json=data, timeout=60)
             jsonData = response.json()
             items = jsonData['data']['items']
             returnMsg = f'🔍搜索内容：「{vulnMsg}」\n------ ------ ------\n'

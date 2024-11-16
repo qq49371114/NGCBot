@@ -153,7 +153,7 @@ class AiDialogue:
                     'client_id': self.qianfanAiConfig.get('qfAccessKey'),
                     'client_secret': self.qianfanAiConfig.get('qfSecretKey'),
                 }
-                resp = requests.post('https://aip.baidubce.com/oauth/2.0/token', headers=headers, data=query)
+                resp = requests.post('https://aip.baidubce.com/oauth/2.0/token', headers=headers, data=query, timeout=60)
                 access_token = resp.json()['access_token']
                 return access_token
             except Exception as e:
@@ -166,7 +166,7 @@ class AiDialogue:
                 data = {
                     'messages': messages
                 }
-                resp = requests.post(url, json=data)
+                resp = requests.post(url, json=data, timeout=60)
                 result = resp.json()['result']
                 messages.append({"role": "assistant", "content": result})
                 return result, messages
@@ -203,7 +203,7 @@ class AiDialogue:
                     'client_id': self.qianfanAiConfig.get('qfPicAccessKey'),
                     'client_secret': self.qianfanAiConfig.get('qfPicSecretKey'),
                 }
-                resp = requests.post('https://aip.baidubce.com/oauth/2.0/token', headers=headers, data=query)
+                resp = requests.post('https://aip.baidubce.com/oauth/2.0/token', headers=headers, data=query, timeout=60)
                 access_token = resp.json()['access_token']
                 return access_token
             except Exception as e:
@@ -219,7 +219,7 @@ class AiDialogue:
                     "height": 1024,
                     "image_num": 1,
                 }
-                resp = requests.post(url, json=data)
+                resp = requests.post(url, json=data, timeout=60)
                 json_data = resp.json()
                 task_id = json_data['data']['task_id']
                 return task_id
@@ -233,7 +233,7 @@ class AiDialogue:
                 data = {
                     'task_id': task_id
                 }
-                resp = requests.post(url, json=data)
+                resp = requests.post(url, json=data, timeout=60)
                 json_data = resp.json()
                 print(json_data)
                 if json_data['data']['task_status'] == 'SUCCESS':
@@ -247,7 +247,7 @@ class AiDialogue:
         def downloadImg(imgUrl):
             try:
                 save_path = Fcs.returnAiPicFolder() + '/' + str(int(time.time() * 1000)) + '.jpg'
-                resp = requests.get(url=imgUrl)
+                resp = requests.get(url=imgUrl, timeout=60)
                 imgContent = resp.content
                 with open(save_path, mode='wb') as f:
                     f.write(imgContent)
