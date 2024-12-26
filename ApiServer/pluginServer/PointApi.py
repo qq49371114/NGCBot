@@ -3,6 +3,7 @@ import Config.ConfigServer as Cs
 from OutPut.outPut import op
 import requests
 import time
+from security import safe_requests
 
 
 class PointApi:
@@ -41,7 +42,7 @@ class PointApi:
         }
         try:
             file_name = Fcs.returnGaoDeCacheFolder() + '/' + str(int(time.time() * 1000)) + '.png'
-            resp = requests.get(url=self.gaoDeApi, params=params)
+            resp = safe_requests.get(url=self.gaoDeApi, params=params)
             with open(file_name, mode='wb') as f:
                 f.write(resp.content)
             return file_name
@@ -74,7 +75,7 @@ class PointApi:
             'area': 'multi',
         }
         try:
-            resp = requests.get(url=self.aiWenApi, params=parameters, timeout=10)
+            resp = safe_requests.get(url=self.aiWenApi, params=parameters, timeout=10)
             json_data = resp.json()
             if json_data['code'] != 'Success':
                 return None
@@ -117,7 +118,7 @@ class PointApi:
         try:
             msg = '==========\n'
             msg += f'查询IP: {ip}\n'
-            resp = requests.get(
+            resp = safe_requests.get(
                 self.threatBookApi,
                 params=params,
                 timeout=10,
@@ -175,7 +176,7 @@ class PointApi:
         op(f'[*]: 正在调用cMd5解密接口... ...')
         md5Url = self.cmd5Api.format(self.cmd5Email, self.cmd5Key, ciphertext)
         try:
-            content = requests.get(url=md5Url).text
+            content = safe_requests.get(url=md5Url).text
             print(content)
             if 'CMD5-ERROR' in content:
                 return None

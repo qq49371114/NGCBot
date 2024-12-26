@@ -12,6 +12,7 @@ from OutPut.outPut import op
 import requests
 import time
 import json
+from security import safe_requests
 
 
 class AiDialogue:
@@ -247,7 +248,7 @@ class AiDialogue:
         def downloadImg(imgUrl):
             try:
                 save_path = Fcs.returnAiPicFolder() + '/' + str(int(time.time() * 1000)) + '.jpg'
-                resp = requests.get(url=imgUrl)
+                resp = safe_requests.get(url=imgUrl)
                 imgContent = resp.content
                 with open(save_path, mode='wb') as f:
                     f.write(imgContent)
