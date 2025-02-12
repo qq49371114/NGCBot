@@ -4,9 +4,9 @@ import Config.ConfigServer as Cs
 from OutPut.outPut import op
 import requests
 import asyncio
-import random
 import time
 import os
+import secrets
 
 
 class HappyApi:
@@ -46,7 +46,7 @@ class HappyApi:
         :return:
         """
         op(f'[*]: 正在调用美女图片Api接口... ...')
-        picUrl = random.choice(self.picUrlList)
+        picUrl = secrets.choice(self.picUrlList)
         savePath = Fcs.returnPicCacheFolder() + '/' + str(int(time.time() * 1000)) + '.jpg'
         picPath = self.downloadFile(picUrl, savePath)
         if not picPath:
@@ -63,7 +63,7 @@ class HappyApi:
         :return:
         """
         op(f'[*]: 正在调用美女视频Api接口... ...')
-        videoUrl = random.choice(self.videoUrlList)
+        videoUrl = secrets.choice(self.videoUrlList)
         savePath = Fcs.returnVideoCacheFolder() + '/' + str(int(time.time() * 1000)) + '.mp4'
         videoPath = self.downloadFile(videoUrl, savePath)
         if not videoPath:
@@ -138,7 +138,7 @@ class HappyApi:
         if not avatarPathList:
             raise 'avatarPathList None'
         if not memeKey:
-            memeKey = random.choices(get_meme_keys())[0]
+            memeKey = secrets.SystemRandom().choices(get_meme_keys())[0]
 
         savePath = Fcs.returnPicCacheFolder() + '/' + str(int(time.time() * 1000)) + '.gif'
         try:
