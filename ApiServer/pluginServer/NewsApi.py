@@ -87,7 +87,7 @@ class NewsApi:
             try:
                 yesterday = (datetime.date.today() + datetime.timedelta(-1))
                 yesterdayTime = str(yesterday.strftime('%Y-%m-%d'))
-                resp = requests.get(url='https://forum.butian.net/community?page=1', verify=True)
+                resp = requests.get(url='https://forum.butian.net/community?page=1', verify=True, timeout=60)
                 tree = etree.HTML(resp.text)
                 sections = tree.xpath('//div[@class="stream-list blog-stream"]/section')
                 for section in sections:
