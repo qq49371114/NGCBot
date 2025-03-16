@@ -19,7 +19,7 @@ def returnConfigData():
     :return:
     """
     current_path = returnConfigPath()
-    configData = yaml.load(open(current_path + '/Config.yaml', mode='r', encoding='UTF-8'), yaml.Loader)
+    configData = yaml.load(open(current_path + '/Config.yaml', mode='r', encoding='UTF-8'), yaml.SafeLoader)
     return configData
 
 
@@ -29,7 +29,7 @@ def returnFingerConfigData():
     :return:
     """
     current_path = returnConfigPath()
-    configData = yaml.load(open(current_path + '/Finger.yaml', mode='r', encoding='UTF-8'), yaml.Loader)
+    configData = yaml.load(open(current_path + '/Finger.yaml', mode='r', encoding='UTF-8'), yaml.SafeLoader)
     return configData
 
 
@@ -39,7 +39,7 @@ def returnFeishuConfigData():
     :return:
     """
     current_path = returnConfigPath()
-    configData = yaml.load(open(current_path + '/Feishu.yaml', mode='r', encoding='UTF-8'), yaml.Loader)
+    configData = yaml.load(open(current_path + '/Feishu.yaml', mode='r', encoding='UTF-8'), yaml.SafeLoader)
     return configData
 
 
