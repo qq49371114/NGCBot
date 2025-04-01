@@ -2,9 +2,9 @@ import FileCache.FileCacheServer as Fcs
 import xml.etree.ElementTree as ET
 import Config.ConfigServer as Cs
 from OutPut.outPut import op
-import requests
 import time
 import os
+from security import safe_requests
 
 
 def getAtData(wcf, msg):
@@ -67,7 +67,7 @@ def getUserPicUrl(wcf, sender):
         if headImgData:
             if headImgData[0]:
                 bigHeadImgUrl = headImgData[0]['bigHeadImgUrl']
-                content = requests.get(url=bigHeadImgUrl, timeout=30).content
+                content = safe_requests.get(url=bigHeadImgUrl, timeout=30).content
                 with open(save_path, mode='wb') as f:
                     f.write(content)
                 return save_path
