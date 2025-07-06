@@ -4,9 +4,9 @@ from OutPut.outPut import op
 from lxml import etree
 import feedparser
 import datetime
-import requests
 import urllib3
 import time
+from security import safe_requests
 
 
 class NewsApi:
@@ -87,7 +87,7 @@ class NewsApi:
             try:
                 yesterday = (datetime.date.today() + datetime.timedelta(-1))
                 yesterdayTime = str(yesterday.strftime('%Y-%m-%d'))
-                resp = requests.get(url='https://forum.butian.net/community?page=1', verify=True)
+                resp = safe_requests.get(url='https://forum.butian.net/community?page=1', verify=True)
                 tree = etree.HTML(resp.text)
                 sections = tree.xpath('//div[@class="stream-list blog-stream"]/section')
                 for section in sections:
@@ -110,7 +110,7 @@ class NewsApi:
             yesterdayTime = str(yesterday.strftime('%Y-%m-%d'))
             eveningNews += "\n#安全客"
             try:
-                resp = requests.get('https://www.anquanke.com/news', timeout=5, verify=True)
+                resp = safe_requests.get('https://www.anquanke.com/news', timeout=5, verify=True)
                 tree = etree.HTML(resp.text)
                 divs = tree.xpath('//div[@id="post-list"]/div')
                 for div in divs:

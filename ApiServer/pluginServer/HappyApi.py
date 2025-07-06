@@ -2,11 +2,11 @@ from meme_generator import get_meme, get_meme_keys
 import FileCache.FileCacheServer as Fcs
 import Config.ConfigServer as Cs
 from OutPut.outPut import op
-import requests
 import asyncio
 import random
 import time
 import os
+from security import safe_requests
 
 
 class HappyApi:
@@ -32,7 +32,7 @@ class HappyApi:
         :return:
         """
         try:
-            content = requests.get(url, timeout=30, verify=True).content
+            content = safe_requests.get(url, timeout=30, verify=True).content
             with open(savePath, mode='wb') as f:
                 f.write(content)
             return savePath
@@ -97,7 +97,7 @@ class HappyApi:
         """
         op(f'[*]: 正在调用KFC疯狂星期四Api接口... ... ')
         try:
-            jsonData = requests.get(url=self.kfcApi, timeout=30).json()
+            jsonData = safe_requests.get(url=self.kfcApi, timeout=30).json()
             result = jsonData.get('text')
             if result:
                 return result
@@ -113,7 +113,7 @@ class HappyApi:
         """
         op(f'[*]: 正在调用舔狗日记Api接口... ... ')
         try:
-            jsonData = requests.get(url=self.dogApi.format(self.txKey), timeout=30).json()
+            jsonData = safe_requests.get(url=self.dogApi.format(self.txKey), timeout=30).json()
             result = jsonData.get('result')
             if result:
                 content = result.get('content')
