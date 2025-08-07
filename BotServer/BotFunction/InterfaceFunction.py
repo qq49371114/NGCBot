@@ -1,10 +1,10 @@
 import FileCache.FileCacheServer as Fcs
-import xml.etree.ElementTree as ET
 import Config.ConfigServer as Cs
 from OutPut.outPut import op
 import requests
 import time
 import os
+import defusedxml.ElementTree
 
 
 def getAtData(wcf, msg):
@@ -16,7 +16,7 @@ def getAtData(wcf, msg):
     """
     noAtMsg = msg.content
     try:
-        root_xml = ET.fromstring(msg.xml)
+        root_xml = defusedxml.ElementTree.fromstring(msg.xml)
         atUserListsElement = root_xml.find('.//atuserlist')
         atUserLists = atUserListsElement.text.replace(' ', '').strip().strip(',').split(
             ',') if atUserListsElement is not None else None

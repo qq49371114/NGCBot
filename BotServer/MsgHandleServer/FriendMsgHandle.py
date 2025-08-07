@@ -2,10 +2,10 @@ from BotServer.BotFunction.InterfaceFunction import *
 from ApiServer.AiServer.AiDialogue import AiDialogue
 from BotServer.BotFunction.JudgeFuncion import *
 from DbServer.DbMainServer import DbMainServer
-import xml.etree.ElementTree as ET
 import Config.ConfigServer as Cs
 from OutPut.outPut import op
 from threading import Thread
+import defusedxml.ElementTree
 
 
 class FriendMsgHandle:
@@ -111,7 +111,7 @@ class FriendMsgHandle:
         同意好友申请处理
         :return:
         """
-        root_xml = ET.fromstring(msg.content.strip())
+        root_xml = defusedxml.ElementTree.fromstring(msg.content.strip())
         wxId = root_xml.attrib["fromusername"]
         op(f'[*]: 接收到新的好友申请, 微信id为: {wxId}')
         v3 = root_xml.attrib["encryptusername"]
@@ -131,7 +131,7 @@ class FriendMsgHandle:
         :param msg:
         :return:
         """
-        root_xml = ET.fromstring(msg.content.strip())
+        root_xml = defusedxml.ElementTree.fromstring(msg.content.strip())
         title_element = root_xml.find(".//title")
         title = title_element.text if title_element is not None else None
         if '微信转账' == title and msg.sender != self.wcf.self_wxid:
